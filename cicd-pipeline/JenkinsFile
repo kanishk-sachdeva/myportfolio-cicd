@@ -1,0 +1,41 @@
+pipeline {
+  agent none
+  environment {
+        DOCKER_HUB_REPO = 'kanu00047/kanishksachdevaportfolio'
+        DOCKER_HUB_CREDENTIALS = 'your-dockerhub-credentials-id'
+    }
+  stages {
+    stage('Build React App for Production Static Files') {
+            agent {
+                docker { image 'node:latest' }
+            }
+            steps {
+                script {
+                    checkout scm
+                }
+                sh 'npm install'
+                sh 'npm run build'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
+                }
+            }
+    }
+
+    stage('Build Docker image with static files and push') {
+            agent {
+                docker { image 'docker:latest' 
+                args '--privileged -v /var/run/docker.sock:/var/run/docker.sock' }
+                
+            }
+            steps {
+                sh 'docker build -t kanishksachdevaportfolio:${BUILD_NUMBER} .'
+
+                withDockerRegistry(credentialsId: DOCKER_HUB_CREDENTIALS, url: '') {
+                        sh "docker push ${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
+                }
+            }
+        }
+  }
+}
