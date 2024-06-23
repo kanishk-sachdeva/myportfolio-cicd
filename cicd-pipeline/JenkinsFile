@@ -1,5 +1,7 @@
 pipeline {
-  agent none
+  agent {
+    docker args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+  }
   environment {
         DOCKER_HUB_REPO = 'kanu00047/kanishksachdevaportfolio'
         DOCKER_HUB_CREDENTIALS = 'your-dockerhub-credentials-id'
