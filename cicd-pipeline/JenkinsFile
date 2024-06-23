@@ -1,6 +1,6 @@
 pipeline {
   agent {
-    docker { args '--user root -v /var/run/docker.sock:/var/run/docker.sock' }
+    docker { image: 'docker:latest' args '--user root -v /var/run/docker.sock:/var/run/docker.sock' }
   }
   environment {
         DOCKER_HUB_REPO = 'kanu00047/kanishksachdevaportfolio'
@@ -26,10 +26,6 @@ pipeline {
     }
 
     stage('Build Docker image with static files and push') {
-            agent {
-                docker { image 'docker:latest' 
-                args '--privileged -v /var/run/docker.sock:/var/run/docker.sock' }
-            }
             steps {
                 sh 'docker build -t kanishksachdevaportfolio:${BUILD_NUMBER} .'
 
