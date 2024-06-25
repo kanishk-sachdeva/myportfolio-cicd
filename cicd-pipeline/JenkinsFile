@@ -37,7 +37,7 @@ pipeline {
                 script {
                     // Copy build artifacts into Docker build context
                     sh 'cp -r build/* .'
-                    sh 'docker build -t ${DOCKER_HUB_REPO}:${BUILD_NUMBER} .'
+                    sh 'docker build -t ${DOCKER_HUB_REPO}:v${BUILD_NUMBER} .'
 
                     withDockerRegistry(credentialsId: DOCKER_HUB_CREDENTIALS, url: '') {
                         sh "docker push ${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
