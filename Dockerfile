@@ -2,7 +2,7 @@ FROM nginx
 
 COPY build/ /nginx/html
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY /cicd-pipeline/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
